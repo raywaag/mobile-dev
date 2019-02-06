@@ -10,6 +10,9 @@ export default class HomeScreen extends React.Component {
     header: null,
   };
 
+  handlesPress = () => {
+      this.props.navigate('Detail');
+  };
 
   render() {
     const {navigate} = this.props.navigation;
