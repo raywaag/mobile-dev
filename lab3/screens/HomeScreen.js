@@ -10,10 +10,6 @@ export default class HomeScreen extends React.Component {
     header: null,
   };
 
-  handlesPress = () => {
-      this.props.navigate('Detail');
-  };
-
   render() {
     const {navigate} = this.props.navigation;
     return (
@@ -33,7 +29,7 @@ export default class HomeScreen extends React.Component {
                     image: require('../assets/images/cats-in-food-11.jpg')}
                   ]}
                  keyExtractor={this._keyExtractor}
-                 renderItem={({item}) => <TouchableOpacity onPress={() => navigate("Detail")}>
+                 renderItem={({item}) => <TouchableOpacity onPress={() => navigate("Details",{ data: this.state.data })}>
                <Image source={item.image} style={{width:200,height:200}} />
              </TouchableOpacity>}
            />
