@@ -16,21 +16,31 @@ export default class HomeScreen extends React.Component {
       <View style={styles.container}>
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
           <View style={styles.getStartedContainer}>
-           <Text style={styles.getStartedText}>Cats are amazing</Text>
+           <Text style={styles.getStartedText}>Collection O' Kitties</Text>
             <FlatList
              data={[
                    {key: 'cat1',
-                    image: require('../assets/images/bow-tie-cat.jpeg')},
+                    image: require('../assets/images/paw-gent_queen.png'),
+                    title:'The PAW-gent Queen',
+                    author:"By Willow the Beutiful Cat"},
                    {key: 'cat2',
-                    image: require('../assets/images/cats-in-food-11.jpg')},
+                    image: require('../assets/images/cats-in-food-11.jpg'),
+                    title:'Blueberry Bob',
+                    author:"By Cats In Food"},
                    {key: 'cat3',
-                    image: require('../assets/images/bow-tie-cat.jpeg')},
+                    image: require('../assets/images/mad_fluff.png'),
+                    title:'Princess of PURRRRsia',
+                    author:"By Mad Fluff"},
                    {key: 'cat4',
-                    image: require('../assets/images/cats-in-food-11.jpg')}
+                    image: require('../assets/images/spot_the_cat.png'),
+                    title:'Where The Cat At?',
+                    author:"By Henry the Colorado Dog"}
                   ]}
                  keyExtractor={this._keyExtractor}
-                 renderItem={({item}) => <TouchableOpacity onPress={() => navigate("Details",{ data: this.state.data })}>
-               <Image source={item.image} style={{width:300,height:300,borderRadius:'22',margin:'5%'}} />
+                 renderItem={({item}) => <TouchableOpacity onPress={() => navigate("Details",{ catName:item.key, catImage:item.image, catTitle:item.title, catAuthor:item.author  })}>
+               <Image source={item.image} style={styles.image} />
+               <Text style={{textAlign:"center", fontSize: 20}}>{item.title}</Text>
+               <Text style={{textAlign:"center", marginBottom:30}}>{item.author}</Text>
              </TouchableOpacity>}
            />
         </View>
@@ -44,6 +54,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+  image: {
+    borderRadius:22,
+    width:300,
+    height:300,
+    margin:"5%",
   },
   developmentModeText: {
     marginBottom: 20,
@@ -69,7 +85,7 @@ const styles = StyleSheet.create({
   },
   getStartedContainer: {
     alignItems: 'center',
-    marginHorizontal: 50,
+    marginHorizontal: 10,
   },
   homeScreenFilename: {
     marginVertical: 7,
@@ -83,9 +99,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4,
   },
   getStartedText: {
-    fontSize: 17,
+    marginTop: 40,
+    padding:15,
+    fontSize: 35,
     color: 'rgba(96,100,109, 1)',
-    lineHeight: 24,
+    lineHeight: 34,
     textAlign: 'center',
   },
   tabBarInfoContainer: {
