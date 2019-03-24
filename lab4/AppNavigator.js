@@ -1,5 +1,5 @@
 import { createStackNavigator } from 'react-navigation';
-import WeatherProject from './weather_project.1';
+import WeatherProject from './WeatherProject';
 import Settings from './Settings';
 
 const AppNavigator = createStackNavigator({

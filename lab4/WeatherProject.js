@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import {
   StyleSheet,
   Text,
@@ -25,7 +25,7 @@ import OpenWeatherMap from "./open_weather_map";
 // This version pulls a specified photo from the camera roll
  import PhotoBackdrop from './PhotoBackdrop/local_image';
 
-class WeatherProject extends Component {
+class WeatherProject extends React.Component {
 
   constructor(props) {
     super(props);

@@ -1,7 +1,6 @@
-import React from 'react';
-import { createStackNavigator } from 'react-navigation';
+import React from "react";
 
-export default class Settings extends React.Component {
+class Settings extends React.Component {
   static navigationOptions = {
     title: 'Settings',
   };
@@ -10,3 +9,5 @@ export default class Settings extends React.Component {
     return 
   }
 }
+
+export default Settings; 
