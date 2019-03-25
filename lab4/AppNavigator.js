@@ -1,10 +1,9 @@
-import { createStackNavigator } from 'react-navigation';
+import { createStackNavigator, createAppContainer } from 'react-navigation';
 import WeatherProject from './WeatherProject';
 import Settings from './Settings';
 
-const AppNavigator = createStackNavigator({
-  Home: { screen: WeatherProject },
-  Settings: { screen: Settings},
-});
-
-export default AppNavigator;
+export default createAppContainer(createStackNavigator({
+  Home: WeatherProject,
+ Settings: Settings,
+}, {initialRouteName: "Home"})); 
+//export default WeatherProject;

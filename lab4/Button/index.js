@@ -9,7 +9,7 @@ class Button extends Component {
     return (
       <TouchableHighlight onPress={this.props.onPress}>
         <View style={[styles.button, this.props.style]}>
-          <Text>
+          <Text style={{color:"#343434"}}>
             {this.props.label}
           </Text>
         </View>

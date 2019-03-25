@@ -8,7 +8,6 @@ import {
   AsyncStorage,
 } from "react-native";
 import Button from "./Button";
-import { Icon } from 'react-native-elements'
 import * as Expo from "expo";
 import Forecast from "./Forecast";
 import LocationButton from "./LocationButton";
@@ -29,15 +28,20 @@ class WeatherProject extends React.Component {
 
   constructor(props) {
     super(props);
+    this.handleChange = this.handleChange.bind(this);
 
     this.state = { 
       forecast: null,
       time: "",
     };
   }
-  
+
+  handleChange(e) {
+    this.props.onTemperatureChange(e.target.value);
+  }
+
   updateTime = () => {
-    this.setState({time:new Date(Date.now()).toLocaleTimeString()})
+      this.setState({time:new Date(Date.now()).toLocaleTimeString()})
   } 
     
   checkMultiPermissions = async() => {
@@ -94,7 +98,7 @@ class WeatherProject extends React.Component {
         }
       }
 
-  componentDidMount() {
+  componentDidMount = () => {
     AsyncStorage
       .getItem(STORAGE_KEY)
       .then(value => {
@@ -129,12 +133,6 @@ class WeatherProject extends React.Component {
     });
   };
 
-  _handleTextChange = event => {
-    let zip = event.nativeEvent.text;
-    this._getForecastForZip(zip);
-  };
-
-
   render() {
     let content = null;
     console.log("Rendered" + this.state.newPostImage);
@@ -150,21 +148,8 @@ class WeatherProject extends React.Component {
     }
 
     return (
-      <PhotoBackdrop image={this.state.newPostImage} >
+      <PhotoBackdrop image={this.state.newPostImage}>
         <View style={styles.overlay}>
-          <View style={styles.row}>
-
-           <Text style={textStyles.mainText}>
-              Forecast for
-            </Text> 
-            <View style={styles.zipContainer}>
-              <TextInput
-                style={[textStyles.mainText, styles.zipCode]}
-                onSubmitEditing={this._handleTextChange}
-                underlineColorAndroid="transparent"
-              />
-            </View>
-          </View>
 
           <View style={styles.row}>
             <LocationButton onGetCoords={this._getForecastForCoords} />
@@ -205,16 +190,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 24
   },
-  zipContainer: {
-    borderBottomColor: "#DDDDDD",
-    borderBottomWidth: 1,
-    marginLeft: 5,
-    marginTop: 3,
-    width: 80,
-    height: textStyles.baseFontSize * 2,
-    justifyContent: "flex-end"
-  },
-  zipCode: { flex: 1 },
   clockStyle: {
     color:"white",
     fontSize:24,
