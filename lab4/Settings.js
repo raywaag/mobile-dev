@@ -2,11 +2,6 @@ import React from "react";
 import {View,ScrollView, Text, StyleSheet} from 'react-native';
 import Button from "./Button";
 
-const scaleNames = {
-  c: 'Celsius',
-  f: 'Fahrenheit'
-};
-
 class Settings extends React.Component {
   static navigationOptions = {
     title: 'Settings',
@@ -14,33 +9,65 @@ class Settings extends React.Component {
 
   constructor(props) {
     super(props);
-    this.handleCelsiusChange = this.handleCelsiusChange.bind(this);
-    this.handleFahrenheitChange = this.handleFahrenheitChange.bind(this);
     this.state = { 
-      temperature: '',
-      scale: 'f',
+      fahrenheit: true,
+      temp: '',
     };
   }
 
-  toCelsius(fahrenheit) {
-    return (fahrenheit - 32) * 5 / 9;
-  }
-  toFahrenheit(celsius) {
-    return (celsius * 9 / 5) + 32;
+
+  setMetric(fahrenheit) {
+    this.setState({ fahrenheit });
   }
 
- 
-  handleCelsiusChange(temperature) {
-    this.setState({scale: 'c', temperature});
-  }
-  handleFahrenheitChange(temperature) {
-    this.setState({scale: 'f', temperature});
-  }
+  converter = (fahrenheit) => {
+    const intTemperature = parseInt(this.state.temp, 10);
+    if (fahrenheit) {
+      return String(Math.round(((intTemperature * 9) / 5) - 459.67));
+    }
+    return String(Math.round(intTemperature - 273.15));
+  };
+
+  checkMultiPermissions = async() => {
+    const { Permissions, FileSystem } = Expo;
+    console.log(FileSystem.documentDirectory);
+    let { status, expires, permissions } = await Permissions.getAsync(Permissions.CAMERA_ROLL)
+    if (status !== 'granted') {
+      console.log('Hey! You heve not enabled selected permissions');
+      const { newStatus, expires, permissions } = await Permissions.askAsync(Permissions.CAMERA_ROLL)
+      status = newStatus;
+    }
+    if(status === 'granted') {
+        console.log("Granted!");
+        let result = await Expo.ImagePicker.launchImageLibraryAsync({
+          allowsEditing: true,
+        })
+
+        console.log(result);
+          if (!result.cancelled) {
+            console.log(this);
+            console.log("Accepted!");
+            this.setState({ newPostImage:result.uri, createPostModalVisible: true })
+            FileSystem.copyAsync({from:result.uri,to:FileSystem.documentDirectory+"myimage.jpg"})
+            .then(() => console.log("Moved to location"));
+            try {
+              await AsyncStorage.setItem('@MySuperStore:key', result.uri)
+              .then(() => console.log("Saved selection to disk: " + result.uri))
+              .catch(error => console.error("AsyncStorage error: " + error.message))
+              .done();
+              console.log("saved");
+              this._retrieveData();
+            } catch (error) {
+              // Error saving data
+            }
+          }
+      }
+      
+  } 
+
 
   render() {
-
-    const scale = this.state.scale;
-    const temperature = this.state.temperature;
+    const { fahrenheit } = this.state;
 
     return (
       <ScrollView>
@@ -51,20 +78,26 @@ class Settings extends React.Component {
         <View style={styles.row}>
           <Button 
           label="Celcius"
-          scale="c"
-          temperature={celsius}
-          onTemperatureChange={this.handleCelsiusChange} 
+          onPress={() => {this.setMetric(!fahrenheit);}}
           />
         </View>
 
         <View style={styles.row}>
           <Button 
           label="Fahrenheit"
-          scale="f"
-          temperature={fahrenheit}
-          onTemperatureChange={this.handleFahrenheitChange} 
+          onPress={() => {this.setMetric(!fahrenheit);}}
+          fahrenheit={fahrenheit}
           />
         </View>
+
+        <View style={styles.row}>
+          <Text style={styles.header}>Background Slides</Text>
+        </View>
+
+          <View style={styles.row}>
+            <Button onPress={this.checkMultiPermissions} label="Choose Image"></Button>
+          </View>
+        
       </ScrollView>
     );
   }

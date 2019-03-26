@@ -25,6 +25,9 @@ import OpenWeatherMap from "./open_weather_map";
  import PhotoBackdrop from './PhotoBackdrop/local_image';
 
 class WeatherProject extends React.Component {
+  static navigationOptions = {
+    title: 'Home',
+  }
 
   constructor(props) {
     super(props);
@@ -133,6 +136,11 @@ class WeatherProject extends React.Component {
     });
   };
 
+  _handleTextChange = event => {
+    let zip = event.nativeEvent.text;
+    this._getForecastForZip(zip);
+  };
+
   render() {
     let content = null;
     console.log("Rendered" + this.state.newPostImage);
@@ -150,6 +158,19 @@ class WeatherProject extends React.Component {
     return (
       <PhotoBackdrop image={this.state.newPostImage}>
         <View style={styles.overlay}>
+
+        <View style={styles.row}>
+            <Text style={textStyles.mainText}>
+              Forecast for
+            </Text>
+            <View style={styles.zipContainer}>
+              <TextInput
+                style={[textStyles.mainText, styles.zipCode]}
+                onSubmitEditing={this._handleTextChange}
+                underlineColorAndroid="transparent"
+              />
+            </View>
+          </View>
 
           <View style={styles.row}>
             <LocationButton onGetCoords={this._getForecastForCoords} />
@@ -193,6 +214,17 @@ const styles = StyleSheet.create({
   clockStyle: {
     color:"white",
     fontSize:24,
+  },
+  zipContainer: {
+    borderBottomColor: "#DDDDDD",
+    borderBottomWidth: 1,
+    marginLeft: 5,
+    marginTop: 3,
+    width: 80,
+    height: textStyles.baseFontSize * 2,
+    justifyContent: "flex-end"
+  },
+  zipCode: { flex: 1 
   }
 });
 
