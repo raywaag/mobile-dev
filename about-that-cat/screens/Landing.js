@@ -1,11 +1,11 @@
 import React from 'react';
-import { Image,Platform,ScrollView,StyleSheet,Text,TouchableOpacity,FlatList,View } from 'react-native';
+import { Image,Platform,ScrollView,StyleSheet,Text,TouchableOpacity,FlatList,View, Button } from 'react-native';
 import { WebBrowser } from 'expo';
 import { MonoText } from '../components/StyledText';
-import { Detail } from '../screens/Detail';
+import { HomeScreen } from '../screens/HomeScreen';
 import { createStackNavigator } from 'react-navigation';
 
-export default class HomeScreen extends React.Component {
+export default class Landing extends React.Component {
   static navigationOptions = {
     header: null,
   };
@@ -16,33 +16,14 @@ export default class HomeScreen extends React.Component {
       <View style={styles.container}>
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
           <View style={styles.getStartedContainer}>
+          <Image style={styles.logoImage} source={require('../assets/images/about-that-logo.png')} />
            <Text style={styles.getStartedText}>about that cat</Text>
-            <FlatList
-             data={[
-                   {key: 'cat1',
-                    image: require('../assets/images/paw-gent_queen.png'),
-                    title:'The PAW-gent Queen',
-                    author:"By Willow the Beutiful Cat"},
-                   {key: 'cat2',
-                    image: require('../assets/images/cats-in-food-11.jpg'),
-                    title:'Blueberry Bob',
-                    author:"By Cats In Food"},
-                   {key: 'cat3',
-                    image: require('../assets/images/mad_fluff.png'),
-                    title:'Princess of PURRRRsia',
-                    author:"By Mad Fluff"},
-                   {key: 'cat4',
-                    image: require('../assets/images/spot_the_cat.png'),
-                    title:'Where The Cat At?',
-                    author:"By Henry the Colorado Dog"}
-                  ]}
-                 keyExtractor={this._keyExtractor}
-                 renderItem={({item}) => <TouchableOpacity onPress={() => navigate("Details",{ catName:item.key, catImage:item.image, catTitle:item.title, catAuthor:item.author  })}>
-               <Image source={item.image} style={styles.image} />
-               <Text style={{textAlign:"center", fontSize: 20}}>{item.title}</Text>
-               <Text style={{textAlign:"center", marginBottom:30}}>{item.author}</Text>
-             </TouchableOpacity>}
-           />
+            <Button
+                color="#B5A99D"
+                title = 'PROWL'
+                accessibilityLabel="Click here to enter the app!"
+                keyExtractor={this._keyExtractor}
+                onPress={() => navigate('HomeScreen')} />
         </View>
       </ScrollView>
     </View>
@@ -99,13 +80,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4,
   },
   getStartedText: {
-    marginTop: 40,
+    marginTop: 60,
     padding:15,
     fontSize: 35,
     color: 'rgba(96,100,109, 1)',
     lineHeight: 34,
     textAlign: 'center',
     fontFamily: 'Hiragino Mincho ProN',
+  },
+  logoImage:{
+    marginTop: 200,
   },
   tabBarInfoContainer: {
     position: 'absolute',

@@ -16,7 +16,7 @@ export default class Detail extends React.Component {
       <View style={styles.container}>
         <Image source={passedImage} style={{width:"100%",height:"60%",margin:'5%'}}/>
         <Text style={styles.imageTitle}>{passedTitle}</Text>
-        <Text>{passedAuthor}</Text>
+        <Text style={styles.imageAuthor}>{passedAuthor}</Text>
         <Button
           title="Go back"
           onPress={() => this.props.navigation.goBack()}
@@ -29,6 +29,12 @@ export default class Detail extends React.Component {
 const styles = StyleSheet.create({
   imageTitle: {
     fontSize: 30,
+    fontFamily: 'Hiragino Mincho ProN',
+  },
+  imageAuthor: {
+    fontSize: 12,
+    fontFamily: 'Hiragino Sans',
+    textTransform: 'uppercase',
   },
   container: {
     flex:1,
