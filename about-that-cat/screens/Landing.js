@@ -23,7 +23,7 @@ export default class Landing extends React.Component {
                 title = 'PROWL'
                 accessibilityLabel="Click here to enter the app!"
                 keyExtractor={this._keyExtractor}
-                onPress={() => navigate('HomeScreen')} />
+                onPress={() => navigate('Home', {})} />
         </View>
       </ScrollView>
     </View>

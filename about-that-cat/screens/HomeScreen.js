@@ -1,5 +1,6 @@
 import React from 'react';
-import { Image,Platform,ScrollView,StyleSheet,Text,TouchableOpacity,FlatList,View } from 'react-native';
+import { Image,Platform,ScrollView,StyleSheet,Text,TouchableOpacity,FlatList,View, Picker } from 'react-native';
+import { Dropdown } from 'react-native-material-dropdown';
 import { WebBrowser } from 'expo';
 import { MonoText } from '../components/StyledText';
 import { Detail } from '../screens/Detail';
@@ -12,11 +13,29 @@ export default class HomeScreen extends React.Component {
 
   render() {
     const {navigate} = this.props.navigation;
+
+    let data = [{
+      value: 'Banana',
+    }, {
+      value: 'Mango',
+    }, {
+      value: 'Pear',
+    }];
+
     return (
       <View style={styles.container}>
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
           <View style={styles.getStartedContainer}>
            <Text style={styles.getStartedText}>about that cat</Text>
+
+            <Dropdown
+              containerStyle={{width:200}}
+              label='Favorite Fruit'
+              textColor="#707070"
+              label='Cat Breed'
+              data={data}
+            />
+
             <FlatList
              data={[
                    {key: 'cat1',
@@ -106,6 +125,9 @@ const styles = StyleSheet.create({
     lineHeight: 34,
     textAlign: 'center',
     fontFamily: 'Hiragino Mincho ProN',
+  },
+  dropDown: {
+    width:100,
   },
   tabBarInfoContainer: {
     position: 'absolute',
