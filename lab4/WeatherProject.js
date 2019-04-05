@@ -14,7 +14,6 @@ import LocationButton from "./LocationButton";
 import textStyles from "./styles/typography.js";
 
 const STORAGE_KEY = "@SmarterWeather:zip";
-
 import OpenWeatherMap from "./open_weather_map";
 
 
