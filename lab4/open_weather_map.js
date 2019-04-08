@@ -1,4 +1,4 @@
-const WEATHER_API_KEY = "bbeb34ebf60ad50f7893e7440a1e2b0b";
+const WEATHER_API_KEY = "ec655a884baf839125ea8e2b3e21b5f0";
 const API_STEM = "http://api.openweathermap.org/data/2.5/weather?";
 
 function zipUrl(zip) {

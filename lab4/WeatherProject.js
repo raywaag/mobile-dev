@@ -174,10 +174,6 @@ class WeatherProject extends React.Component {
           <View style={styles.row}>
             <LocationButton onGetCoords={this._getForecastForCoords} />
           </View>
-          
-          <View style={styles.row}>
-            <Button onPress={this.checkMultiPermissions} label="Choose Image"></Button>
-          </View>
 
           <View style={styles.row}>
           <Button
