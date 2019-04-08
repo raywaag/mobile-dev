@@ -6,6 +6,9 @@ import {
   TextInput,
   FlatList,
   AsyncStorage,
+  ScrollView,
+  Image,
+  Dimensions
 } from "react-native";
 import Button from "./Button";
 import * as Expo from "expo";
@@ -15,6 +18,8 @@ import textStyles from "./styles/typography.js";
 
 const STORAGE_KEY = "@SmarterWeather:zip";
 import OpenWeatherMap from "./open_weather_map";
+
+const { width, height } = Dimensions.get('window');
 
 
 // This version uses flowers.png from local assets
@@ -112,7 +117,22 @@ class WeatherProject extends React.Component {
       .done();
       this._retrieveData();
       
+      // updating clock every second
       setInterval(this.updateTime, 1000);
+
+      // Image SlideShow
+   const numOfBackground = 5;
+    let scrollValue = 0, scrolled = 0;
+    setInterval(function () {
+        scrolled++;
+        if(scrolled < numOfBackground)
+            scrollValue = scrollValue + width;
+        else{
+            scrollValue = 0;
+            scrolled = 0
+        }
+        _scrollView.scrollTo({ x: scrollValue, animated: false })
+    }, 3000);
 
   } 
 
@@ -157,6 +177,18 @@ class WeatherProject extends React.Component {
     return (
       <PhotoBackdrop image={this.state.newPostImage}>
         <View style={styles.overlay}>
+
+        <ScrollView 
+        style = {{position: 'absolute'}}
+        ref={(scrollView) => { _scrollView = scrollView; }}
+        horizontal={true} pagingEnabled={true} 
+        >
+          <Image source={require('./images/1.jpg')} style={{height, width}} />
+          <Image source={require('./images/2.jpg')} style={{height, width}} />
+          <Image source={require('./images/3.jpg')} style={{height, width}} />
+          <Image source={require('./images/4.jpg')} style={{height, width}} />
+          <Image source={require('./images/5.jpg')} style={{height, width}} />
+        </ScrollView>
 
         <View style={styles.row}>
             <Text style={textStyles.mainText}>
