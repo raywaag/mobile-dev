@@ -11,7 +11,7 @@ export default class ForecastCard extends Component {
 				<Text style={styles.notes}>{this.props.location}</Text>
 				
 				<View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center'}}>
-                <Text style={styles.notes}>{Math.round( this.props.main.temp * 10) / 10 }&#8451;</Text>
+                <Text style={styles.notes}>{Math.round( this.props.detail.main.temp * 10) / 10 }&#8451;</Text>
 				</View>
 			</Card>
 		);

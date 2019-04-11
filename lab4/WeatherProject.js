@@ -17,8 +17,6 @@ import LocationButton from "./LocationButton";
 import textStyles from "./styles/typography.js";
 import ForecastCard from './ForecastCard';
 
-const STORAGE_KEY = "@SmarterWeather:zip";
-
 const { width, height } = Dimensions.get('window');
 
 
@@ -37,10 +35,10 @@ class WeatherProject extends React.Component {
     super(props);
 
     this.state = { 
-      weather: [],
+      forecast: [],
       time: "",
-      latitude: null,
-      longitude: null,
+      latitude: 0,
+      longitude: 0,
       error: null,
     };
   }
@@ -122,40 +120,42 @@ class WeatherProject extends React.Component {
         _scrollView.scrollTo({ x: scrollValue, animated: false })
     }, 3000);
 
-
-
-      this.watchId = navigator.geolocation.watchPosition(
-        (position) => {
-          this.setState({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-            error: null,
-          }, () => { this.getWeather(); });
-        },
-        (error) => this.setState({ error: error.message }),
-        { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000, distanceFilter: 10 },
-      );
+      // Get the user's location
+      this.getLocation();
   } 
 
-  componentWillUnmount() {
-    navigator.geolocation.clearWatch(this.watchId);
-  }
+  getLocation(){
+
+		// Get the current position of the user
+		navigator.geolocation.getCurrentPosition(
+			(position) => {
+				this.setState(
+					(prevState) => ({
+					latitude: position.coords.latitude, 
+					longitude: position.coords.longitude
+					}), () => { this.getWeather(); }
+				);
+			},
+			(error) => this.setState({ forecast: error.message }),
+			{ enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
+		);
+	}
+
 
   getWeather(){
 
-
         // Construct the API url to call
-        let url = 'https://api.openweathermap.org/data/2.5/weather?lat=' + this.state.latitude + '&lon=' + this.state.longitude + '&units=metric&appid=ec655a884baf839125ea8e2b3e21b5f0';
+        let url = 'https://api.openweathermap.org/data/2.5/forecast?lat=' + this.state.latitude + '&lon=' + this.state.longitude + '&units=metric&appid=ec655a884baf839125ea8e2b3e21b5f0';
 
         // Call the API, and set the state of the weather forecast
         fetch(url)
-          .then(response => response.json())
-          .then(data => {
-              this.setState((prevState, props) => ({
-                  weather: data
+        .then(response => response.json())
+        .then(data => {
+          this.setState((prevState, props) => ({
+            forecast: data
           }));
         })
-      }
+    }
 
 
   render() {
@@ -190,10 +190,7 @@ class WeatherProject extends React.Component {
             <Text style={styles.clockStyle}>{this.state.time}</Text>
           </View>
           
-          <FlatList data={this.state.weather} style={{marginTop:20}} keyExtractor={item => item.dt_text} renderItem={({item}) => <ForecastCard detail={item} location={this.state.coord.lon} />} />
-
-          <Text>Latitude: {this.state.latitude}</Text>
-          <Text>Longitude: {this.state.longitude}</Text>
+          <FlatList data={this.state.forecast.list} style={{marginTop:20}} keyExtractor={item => item.dt_txt} renderItem={({item}) => <ForecastCard detail={item} location={this.state.forecast.city.name} />} />
 
         </View>
       </PhotoBackdrop>
