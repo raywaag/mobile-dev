@@ -15,9 +15,9 @@ import * as Expo from "expo";
 import Forecast from "./Forecast";
 import LocationButton from "./LocationButton";
 import textStyles from "./styles/typography.js";
+import ForecastCard from './ForecastCard';
 
 const STORAGE_KEY = "@SmarterWeather:zip";
-import OpenWeatherMap from "./open_weather_map";
 
 const { width, height } = Dimensions.get('window');
 
@@ -35,16 +35,14 @@ class WeatherProject extends React.Component {
 
   constructor(props) {
     super(props);
-    this.handleChange = this.handleChange.bind(this);
 
     this.state = { 
-      forecast: null,
+      weather: [],
       time: "",
+      latitude: null,
+      longitude: null,
+      error: null,
     };
-  }
-
-  handleChange(e) {
-    this.props.onTemperatureChange(e.target.value);
   }
 
   updateTime = () => {
@@ -106,16 +104,6 @@ class WeatherProject extends React.Component {
       }
 
   componentDidMount = () => {
-    AsyncStorage
-      .getItem(STORAGE_KEY)
-      .then(value => {
-        if (value !== null) {
-          this._getForecastForZip(value);
-        }
-      })
-      .catch(error => console.error("AsyncStorage error: " + error.message))
-      .done();
-      this._retrieveData();
       
       // updating clock every second
       setInterval(this.updateTime, 1000);
@@ -134,45 +122,43 @@ class WeatherProject extends React.Component {
         _scrollView.scrollTo({ x: scrollValue, animated: false })
     }, 3000);
 
+
+
+      this.watchId = navigator.geolocation.watchPosition(
+        (position) => {
+          this.setState({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            error: null,
+          }, () => { this.getWeather(); });
+        },
+        (error) => this.setState({ error: error.message }),
+        { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000, distanceFilter: 10 },
+      );
   } 
 
-  _getForecastForZip = zip => {
-    // Store zip code
-    AsyncStorage
-      .setItem(STORAGE_KEY, zip)
-      .then(() => console.log("Saved selection to disk: " + zip))
-      .catch(error => console.error("AsyncStorage error: " + error.message))
-      .done();
+  componentWillUnmount() {
+    navigator.geolocation.clearWatch(this.watchId);
+  }
 
-    OpenWeatherMap.fetchZipForecast(zip).then(forecast => {
-      this.setState({ forecast: forecast });
-    });
-  };
+  getWeather(){
 
-  _getForecastForCoords = (lat, lon) => {
-    OpenWeatherMap.fetchLatLonForecast(lat, lon).then(forecast => {
-      this.setState({ forecast: forecast });
-    });
-  };
 
-  _handleTextChange = event => {
-    let zip = event.nativeEvent.text;
-    this._getForecastForZip(zip);
-  };
+        // Construct the API url to call
+        let url = 'https://api.openweathermap.org/data/2.5/weather?lat=' + this.state.latitude + '&lon=' + this.state.longitude + '&units=metric&appid=ec655a884baf839125ea8e2b3e21b5f0';
+
+        // Call the API, and set the state of the weather forecast
+        fetch(url)
+          .then(response => response.json())
+          .then(data => {
+              this.setState((prevState, props) => ({
+                  weather: data
+          }));
+        })
+      }
+
 
   render() {
-    let content = null;
-    console.log("Rendered" + this.state.newPostImage);
-    if (this.state.forecast !== null) {
-      content = (
-        <View style={styles.row}>
-          <Forecast
-            main={this.state.forecast.main}
-            temp={this.state.forecast.temp}
-          />
-        </View>
-      );
-    }
 
     return (
       <PhotoBackdrop image={this.state.newPostImage}>
@@ -190,24 +176,7 @@ class WeatherProject extends React.Component {
           <Image source={require('./images/5.jpg')} style={{height, width}} />
         </ScrollView>
 
-        <View style={styles.row}>
-            <Text style={textStyles.mainText}>
-              Forecast for
-            </Text>
-            <View style={styles.zipContainer}>
-              <TextInput
-                style={[textStyles.mainText, styles.zipCode]}
-                onSubmitEditing={this._handleTextChange}
-                underlineColorAndroid="transparent"
-              />
-            </View>
-          </View>
-
-          <View style={styles.row}>
-            <LocationButton onGetCoords={this._getForecastForCoords} />
-          </View>
-
-          <View style={styles.row}>
+          <View style={styles.settings}>
           <Button
               label="Settings"
               onPress={() =>
@@ -221,7 +190,10 @@ class WeatherProject extends React.Component {
             <Text style={styles.clockStyle}>{this.state.time}</Text>
           </View>
           
-          {content}
+          <FlatList data={this.state.weather} style={{marginTop:20}} keyExtractor={item => item.dt_text} renderItem={({item}) => <ForecastCard detail={item} location={this.state.coord.lon} />} />
+
+          <Text>Latitude: {this.state.latitude}</Text>
+          <Text>Longitude: {this.state.longitude}</Text>
 
         </View>
       </PhotoBackdrop>
@@ -238,9 +210,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 24
   },
+  settings: {
+    flexDirection: "row",
+    flexWrap: "nowrap",
+    padding: 24
+  },
   clockStyle: {
     color:"white",
-    fontSize:24,
+    fontSize:44,
   },
   zipContainer: {
     borderBottomColor: "#DDDDDD",
