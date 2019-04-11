@@ -145,7 +145,7 @@ class WeatherProject extends React.Component {
   getWeather(){
 
         // Construct the API url to call
-        let url = 'https://api.openweathermap.org/data/2.5/forecast?lat=' + this.state.latitude + '&lon=' + this.state.longitude + '&units=metric&appid=ec655a884baf839125ea8e2b3e21b5f0';
+        let url = 'https://api.openweathermap.org/data/2.5/forecast?lat=' + this.state.latitude + '&lon=' + this.state.longitude + '&units=imperial&appid=ec655a884baf839125ea8e2b3e21b5f0';
 
         // Call the API, and set the state of the weather forecast
         fetch(url)
