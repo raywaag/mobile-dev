@@ -31,9 +31,9 @@ export default class HomeScreen extends React.Component {
     });
 
     const newData = catList.filter(item => {
-      console.log(item.type)
+      console.log(item.title)
       const itemData = `${item.image} ${item.title}`;
-      const textData = text.toUpperCase();
+      const textData = text;
       return itemData.includes(textData);
     });
     
@@ -41,6 +41,26 @@ export default class HomeScreen extends React.Component {
       data: newData
     });
   };
+
+
+  getImage = (image) => {
+
+      switch (image) {
+          case "AmSh":
+              return require("../assets/images/american-shorthair.jpg");
+              break;
+          case "ArMa":
+              return require("../assets/images/Arabian-Mau.jpeg");
+              break;
+          case "Beng":
+              return require("../assets/images/bengal.jpg");
+              break;
+
+          default:
+              return require("../assets/images/american-shorthair.jpg");
+              break;
+      }
+  }
 
   render() {
     const {navigate} = this.props.navigation;
@@ -65,9 +85,8 @@ export default class HomeScreen extends React.Component {
                  extraData={this.state}
                  data={this.state.data}
                  renderItem={({item}) => <TouchableOpacity onPress={() => navigate("Details",{ catName:item.key, catImage:item.image, catTitle:item.title, catOrigin:item.origin, catBio:item.bio, catTraits:item.traits  })}>
-               <Image source={item.image} style={styles.image} />
+               <Image source={this.getImage(item.image)} style={styles.image} />
                <Text style={{textAlign:"center", fontSize: 20}}>{item.title}</Text>
-               <Text style={{textAlign:"center", marginBottom:30}}>{item.author}</Text>
              </TouchableOpacity>}
            />
         </View>

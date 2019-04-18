@@ -1,20 +1,20 @@
 [
     {"key": "cat1",
-    "image": "../assets/images/american-shorthair.jpg",
+    "image": "AmSh",
     "title":"American Shorthair",
     "origin":"United States",
     "bio":"The American Shorthair is known for its longevity, robust health, good looks, sweet personality, and amiability with children, dogs, and other pets.",
     "traits":"Active, Curious, Easy Going, Playful, Calm"
      },
     {"key": "cat2",
-    "image": "data:../assets/images/Arabian-Mau.jpeg",
+    "image": "ArMa",
     "title":"Arabian Mau",
     "origin":"United Arab Emirates",
     "bio":"Arabian Mau cats are social and energetic. Due to their energy levels, these cats do best in homes where their owners will be able to provide them with plenty of playtime, attention and interaction from their owners. These kitties are friendly, intelligent, and adaptable, and will even get along well with other pets and children.",
     "traits":"Affectionate, Agile, Curious, Independent, Playful, Loyal"
      },
     {"key": "cat3",
-     "image": "data../assets/images/bengal.jpg",
+     "image": "Beng",
      "title":"Bengal",
      "origin":"United States",
      "bio":"Bengals are a lot of fun to live with, but they are definitely not the cat for everyone, or for first-time cat owners. Extremely intelligent, curious and active, they demand a lot of interaction and woe betide the owner who does not provide it.",
