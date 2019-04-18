@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Hiragino Mincho ProN',
   },
   logoImage:{
-    marginTop: 200,
+    marginTop: 100,
   },
   tabBarInfoContainer: {
     position: 'absolute',

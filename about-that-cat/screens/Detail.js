@@ -1,11 +1,13 @@
 import React from 'react';
-import { Button, View, Text, Image, StyleSheet } from 'react-native';
+import { Button, ScrollView, View, Text, Image, StyleSheet } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 
 
 export default class Detail extends React.Component {
-  static navigationOptions = {
-    header: null
+  static navigationOptions = ({ navigation }) =>  {
+    return {
+        headerTitle: "Cat Details",
+      };
   };
 
 
@@ -106,17 +108,15 @@ export default class Detail extends React.Component {
     const passedBio = this.props.navigation.getParam("catBio", "defaultValue");
     const passedTraits = this.props.navigation.getParam("catTraits", "defaultValue");
     return (
-      <View style={styles.container}>
-        <Image source={this.getImage(passedImage)} style={{width:300,height:300,margin:'5%'}}/>
-        <Text style={styles.imageTitle}>{passedTitle}</Text>
-        <Text style={styles.catOrigin}>{passedOrigin}</Text>
-        <Text style={styles.catBio}>{passedBio}</Text>
-        <Text style={styles.catTraits}>{passedTraits}</Text>
-        <Button
-          title="Go back"
-          onPress={() => this.props.navigation.goBack()}
-        />
-      </View>
+      <ScrollView contentContainerStyle={styles.container} horizontal={false}>
+        <View style={styles.viewContainer}>
+            <Image source={this.getImage(passedImage)} style={{width:300,height:300,margin:'5%'}}/>
+            <Text style={styles.imageTitle}>{passedTitle}</Text>
+            <Text style={styles.catOrigin}>{passedOrigin}</Text>
+            <Text style={styles.catBio}>{passedBio}</Text>
+            <Text style={styles.catTraits}>{passedTraits}</Text>
+        </View>
+      </ScrollView>
     );
    }
   }
@@ -126,24 +126,24 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontFamily: 'Hiragino Mincho ProN',
   },
+  viewContainer:{
+    padding:50
+  },
   catOrigin: {
     fontSize: 12,
     fontFamily: 'Hiragino Sans',
     textTransform: 'uppercase',
     fontWeight:'bold',
-    marginTop: 20,
   },
   catBio: {
     fontSize: 12,
     fontFamily: 'Hiragino Sans',
     marginTop: 10,
-    padding:30,
   },
   catTraits: {
     fontSize: 12,
     fontFamily: 'Hiragino Sans',
     fontStyle: 'italic',
-    padding:30,
   },
   container: {
     flex:1,
